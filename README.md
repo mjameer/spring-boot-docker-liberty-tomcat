@@ -1,4 +1,4 @@
-# spring-boot-dockerize
+# spring-boot-Docker for Tomcat and Liberty
 How to Dockerize Spring Boot Application
 
 ### Docker Commands
