@@ -1,0 +1,28 @@
+FROM openjdk:11
+
+USER root
+RUN mkdir -p /config/dropins/
+WORKDIR /config/dropins/
+
+# 2. Copy war file artifact into dropins inside container
+COPY --chown=default:0 target/spring-boot-docker*.war /config/dropins/spring-boot-docker.war
+
+# 3. Default setting for the verbose option
+ARG SSL=true
+ARG MP_MONITORING=true
+ARG VERBOSE=false
+
+# 4. Switching to non-root user
+USER default
+
+#Run command to check the seccomp
+RUN grep Seccomp /proc/$$/status
+
+# 5. Required for liberty
+#RUN configure.sh
+
+CMD ["java","-Xms1024m" ,"-Xmx2048m", "-jar", "spring-boot-docker.war"]
+#CMD ["java","-Xms1024m" ,"-Xmx2048m", "-jar", "-Dspring.profiles.active=dev", "spring-boot-docker.war"]
+
+# Add app label
+LABEL app='spring-boot-docker' TechnicalOwnerEmail='dummy@gmail.com' Namespace='aks-spring-boot-docker'
